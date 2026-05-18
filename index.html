@@ -121,7 +121,7 @@
             font-size: .82rem; line-height: 1.7; position: relative;
             transition: background .35s, border-color .35s;
         }
-        code { font-family: 'Fira Code', monospace; font-size: .82rem; }
+        code { font-family: 'Fira Code', monospace; font-size: .82rem; font-variant-ligatures: none; font-feature-settings: "liga" 0, "calt" 0; }
         pre code { color: var(--text); }
         .kw { color: var(--accent-light); }
         .fn { color: var(--cyan); }
@@ -133,6 +133,7 @@
         .inline-code {
             background: var(--surface-2); padding: 2px 8px; border-radius: 6px;
             font-family: 'Fira Code', monospace; font-size: .82rem; color: var(--cyan);
+            font-variant-ligatures: none; font-feature-settings: "liga" 0, "calt" 0;
             transition: background .35s;
         }
 
@@ -286,18 +287,9 @@
 
     <!-- ══════════ SLIDE 0: Title ══════════ -->
     <section class="slide" data-title="Welcome">
-        <div class="slide-label">FE Training 2025</div>
+        <div class="slide-label">JavaScript Training Session</div>
         <h1>Introduction to JavaScript</h1>
-        <p class="dim" style="font-size:1.05rem; margin-top:8px;">From syntax fundamentals to how the engine runs your code.</p>
-        <div style="margin-top:32px; display:flex; gap:14px; flex-wrap:wrap;">
-            <span class="tag-pill">Variables &amp; Types</span>
-            <span class="tag-pill">Functions</span>
-            <span class="tag-pill">Arrays &amp; Objects</span>
-            <span class="tag-pill">Scope</span>
-            <span class="tag-pill">Hoisting &amp; Call Stack</span>
-        </div>
         <p class="dim" style="margin-top:40px;font-size:.82rem;">
-            Trainer: <strong>Joel Joseph Paul</strong><br>
             Use <span class="inline-code">Arrow Keys</span> or the buttons below to navigate &bull; Press <span class="inline-code">M</span> for menu
         </p>
     </section>
@@ -331,37 +323,16 @@
                         <li>Know <em>how</em> JS executes your code (call stack, hoisting)</li>
                     </ul>
                 </div>
-                <div class="info-box" style="border-left-color:var(--orange);">
-                    <strong>Setup:</strong> VS Code + <span class="inline-code">Live Server</span> extension.<br>
-                    <span class="danger">Warning:</span> Never run <span class="inline-code">while(true)</span> in the browser &mdash; it will hang your tab!
-                </div>
             </div>
         </div>
     </section>
 
-    <!-- ══════════ SLIDE 2: Context ══════════ -->
-    <section class="slide" data-title="HTML, Java & JS">
-        <div class="slide-label">Block 1 &mdash; Context</div>
-        <h2>Setting the Stage</h2>
-        <div class="card-grid">
-            <div class="card">
-                <h3>HTML is <em>not</em> a programming language</h3>
-                <p><span class="highlight">HTML</span> structures content. <span class="highlight">CSS</span> styles it. <span class="highlight">JavaScript</span> executes logic.</p>
-                <p style="margin-top:8px;" class="dim">HTML has no loops, no conditionals, no functions &mdash; it's declarative markup, not computation.</p>
-            </div>
-            <div class="card">
-                <h3>Java &ne; JavaScript</h3>
-                <p>Completely different languages. The similar name was a <span class="warn">marketing decision</span> by Netscape in 1995 to ride Java's hype wave.</p>
-                <p style="margin-top:8px;" class="dim">JavaScript was originally called "Mocha", then "LiveScript", before the rebrand.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- ══════════ SLIDE 3: What is JavaScript ══════════ -->
+    <!-- ══════════ SLIDE 2: What is JavaScript ══════════ -->
     <section class="slide" data-title="What is JavaScript?">
         <div class="slide-label">Block 1 &mdash; Overview</div>
         <h2>What is JavaScript?</h2>
-        <div class="card-grid">
+        <p><span class="highlight">HTML</span> structures content. <span class="highlight">CSS</span> styles it. <span class="highlight">JavaScript</span> executes logic.</p>
+        <div class="card-grid" style="margin-top:14px;">
             <div class="card">
                 <h3>Interpreted</h3>
                 <p>No compilation step &mdash; the engine reads and executes your code line by line.</p>
@@ -387,7 +358,7 @@
     <!-- ══════════ SLIDE 4: Console ══════════ -->
     <section class="slide" data-title="Console">
         <div class="slide-label">Block 1 &mdash; Console</div>
-        <h2>Console &mdash; Your Debugging Best Friend</h2>
+        <h2>Console</h2>
         <p>Open your browser&rsquo;s DevTools (<span class="inline-code">F12</span> or <span class="inline-code">Ctrl+Shift+J</span>) and try these:</p>
         <div class="cols" style="margin-top:14px;">
             <div>
@@ -409,7 +380,7 @@
                         <li><span class="inline-code">console.warn()</span> &mdash; warnings (shows yellow)</li>
                     </ul>
                 </div>
-                <p class="dim" style="font-size:.85rem;margin-top:10px;">You'll use <span class="inline-code">console.log()</span> constantly. It's how you "see" what your code is doing.</p>
+                <p class="dim" style="font-size:.85rem;margin-top:10px;"><span class="inline-code">console.log()</span> is the most common way to inspect what your code is doing.</p>
             </div>
         </div>
     </section>
@@ -426,7 +397,7 @@
 <span class="kw">let</span> active  = <span class="kw">true</span>;          <span class="cmt">// Boolean</span>
 <span class="kw">let</span> nothing = <span class="kw">null</span>;          <span class="cmt">// Null</span>
 <span class="kw">let</span> x;                        <span class="cmt">// Undefined</span>
-<span class="kw">let</span> id      = <span class="fn">Symbol</span>(<span class="str">"id"</span>); <span class="cmt">// Symbol</span>
+<span class="kw">let</span> id      = <span class="fn">Symbol</span>(<span class="str">"id"</span>); <span class="cmt">// Symbol — unique identifier, often used as object property keys</span>
 <span class="kw">let</span> big     = <span class="num">9007199254740991n</span>; <span class="cmt">// BigInt</span></code></pre>
             </div>
             <div>
@@ -616,7 +587,7 @@ a++;      <span class="cmt">// a is now 9</span></code></pre>
 }
 <span class="cmt">// "name" "Alice", "age" 25 (keys)</span></code></pre>
                 <div class="info-box" style="margin-top:8px;">
-                    <strong>Remember:</strong> <span class="inline-code">for...of</span> &rarr; <strong>values</strong> (arrays, strings). <span class="inline-code">for...in</span> &rarr; <strong>keys</strong> (objects). You'll practice this in Hands-on 1!
+                    <strong>Remember:</strong> <span class="inline-code">for...of</span> &rarr; <strong>values</strong> (arrays, strings). <span class="inline-code">for...in</span> &rarr; <strong>keys</strong> (objects).
                 </div>
             </div>
         </div>
@@ -635,7 +606,7 @@ a++;      <span class="cmt">// a is now 9</span></code></pre>
 
 <span class="fn">console</span>.<span class="fn">log</span>(<span class="fn">greet</span>(<span class="str">"Alice"</span>));</code></pre>
                 <div class="output-box">Hello, Alice</div>
-                <p class="dim" style="font-size:.82rem;">Declarations are <span class="highlight">hoisted</span> &mdash; you can call them before they appear in code. (We'll see why in Block 4.)</p>
+                <p class="dim" style="font-size:.82rem;">You can call a declared function even before it appears in the code. Expressions cannot do this.</p>
             </div>
             <div>
                 <h3>Function Expression</h3>
@@ -651,7 +622,7 @@ a++;      <span class="cmt">// a is now 9</span></code></pre>
 
 <span class="fn">console</span>.<span class="fn">log</span>(<span class="fn">add</span>(<span class="num">3</span>, <span class="num">4</span>));      <span class="cmt">// 7</span>
 <span class="fn">console</span>.<span class="fn">log</span>(<span class="fn">multiply</span>(<span class="num">3</span>, <span class="num">4</span>)); <span class="cmt">// 12</span></code></pre>
-                <p class="dim" style="font-size:.82rem;">Expressions are <span class="danger">NOT hoisted</span> &mdash; they behave like regular variables.</p>
+                <p class="dim" style="font-size:.82rem;">Expressions behave like regular variables &mdash; they must be defined before you call them.</p>
             </div>
         </div>
     </section>
@@ -691,7 +662,7 @@ a++;      <span class="cmt">// a is now 9</span></code></pre>
     <span class="kw">return</span> greeting;
 };</code></pre>
                 <div class="info-box" style="margin-top:10px;">
-                    Arrow functions are concise and great for callbacks. You'll use them a lot with array methods.
+                    Arrow functions are concise and commonly used as callbacks, especially with array methods like <span class="inline-code">map</span>, <span class="inline-code">filter</span>, and <span class="inline-code">reduce</span>.
                 </div>
             </div>
         </div>
@@ -735,11 +706,11 @@ a++;      <span class="cmt">// a is now 9</span></code></pre>
 
     <!-- ══════════ SLIDE 14: Hands-on 1 ══════════ -->
     <section class="slide" data-title="Hands-on 1">
-        <div class="slide-label">Block 2 &mdash; Practice Time (~25 min)</div>
+        <div class="slide-label">Block 2 &mdash; Practice Time</div>
         <h2>Hands-on 1 &mdash; Loops, Functions &amp; Callbacks</h2>
 
         <div class="assignment-card">
-            <h3>Exercise 1 &mdash; <span class="inline-code">for...of</span> vs <span class="inline-code">for...in</span> (8 min)</h3>
+            <h3>Exercise 1 &mdash; <span class="inline-code">for...of</span> vs <span class="inline-code">for...in</span></h3>
             <p>You have an array of scores and an object of subjects. Print each value. Notice what works where.</p>
             <pre><code><span class="kw">const</span> scores = [<span class="num">10</span>, <span class="num">25</span>, <span class="num">30</span>, <span class="num">5</span>, <span class="num">18</span>];
 <span class="kw">const</span> grades = { math: <span class="num">90</span>, english: <span class="num">75</span>, science: <span class="num">88</span> };
@@ -754,7 +725,7 @@ a++;      <span class="cmt">// a is now 9</span></code></pre>
         </div>
 
         <div class="assignment-card">
-            <h3>Exercise 2 &mdash; Extract a function (8 min)</h3>
+            <h3>Exercise 2 &mdash; Extract a function</h3>
             <p>Calculate the total for several price arrays. Stop copy-pasting &mdash; <strong>make it a function</strong>.</p>
             <pre><code><span class="kw">const</span> prices1 = [<span class="num">250</span>, <span class="num">120</span>, <span class="num">80</span>];
 <span class="kw">const</span> prices2 = [<span class="num">500</span>, <span class="num">60</span>, <span class="num">340</span>];
@@ -763,7 +734,7 @@ a++;      <span class="cmt">// a is now 9</span></code></pre>
         </div>
 
         <div class="assignment-card">
-            <h3>Exercise 3 &mdash; Pass a function as argument (9 min)</h3>
+            <h3>Exercise 3 &mdash; Pass a function as argument</h3>
             <p>Same arrays, but sometimes you want the <strong>total</strong>, sometimes the <strong>count of items above 100</strong>. Write ONE function that takes the array and a "what to do" function.</p>
             <button class="reveal-btn" onclick="toggleReveal('reveal-h1-3')">Reveal Hint</button>
             <div id="reveal-h1-3" class="hidden-code">
@@ -810,7 +781,7 @@ nums.<span class="fn">shift</span>();        <span class="cmt">// remove from st
     <!-- ══════════ SLIDE 16: Array Methods ══════════ -->
     <section class="slide" data-title="Array Methods: map, filter, reduce">
         <div class="slide-label">Block 3 &mdash; Array Methods</div>
-        <h2>The Big Three: <span class="inline-code">map</span>, <span class="inline-code">filter</span>, <span class="inline-code">reduce</span></h2>
+        <h2><span class="inline-code">map</span>, <span class="inline-code">filter</span>, <span class="inline-code">reduce</span></h2>
         <div class="cols">
             <div>
                 <h3><span class="inline-code">map</span> &mdash; transform each item</h3>
@@ -874,7 +845,7 @@ person.<span class="fn">greet</span>();
                 <pre><code>person.email = <span class="str">"john@example.com"</span>;  <span class="cmt">// add</span>
 person.age = <span class="num">31</span>;                     <span class="cmt">// modify</span></code></pre>
                 <div class="info-box" style="margin-top:12px;">
-                    Objects are everywhere in JS. API responses, DOM elements, configuration &mdash; all objects. This is the pattern you'll see most in real codebases.
+                    Objects are everywhere in JS &mdash; API responses, DOM elements, configuration, event data. Almost everything you interact with in JavaScript is an object.
                 </div>
             </div>
         </div>
@@ -882,7 +853,7 @@ person.age = <span class="num">31</span>;                     <span class="cmt">
 
     <!-- ══════════ SLIDE 18: Hands-on 2 ══════════ -->
     <section class="slide" data-title="Hands-on 2">
-        <div class="slide-label">Block 3 &mdash; Practice Time (~30 min)</div>
+        <div class="slide-label">Block 3 &mdash; Practice Time</div>
         <h2>Hands-on 2 &mdash; Real JS: Work with Data</h2>
         <p>Use this dataset for all tasks:</p>
         <pre><code><span class="kw">const</span> employees = [
@@ -896,27 +867,26 @@ person.age = <span class="num">31</span>;                     <span class="cmt">
 
         <div class="card-grid">
             <div class="card" style="border-left:4px solid var(--green);">
-                <h3 style="color:var(--green);">Level 1 &mdash; <span class="inline-code">map</span></h3>
+                <h3 style="color:var(--green);">Task 1 &mdash; <span class="inline-code">map</span></h3>
                 <p>Extract all names into a new array.</p>
             </div>
             <div class="card" style="border-left:4px solid var(--green);">
-                <h3 style="color:var(--green);">Level 2 &mdash; <span class="inline-code">filter</span></h3>
+                <h3 style="color:var(--green);">Task 2 &mdash; <span class="inline-code">filter</span></h3>
                 <p>Get only employees older than 27.</p>
             </div>
             <div class="card" style="border-left:4px solid var(--cyan);">
-                <h3 style="color:var(--cyan);">Level 3 &mdash; <span class="inline-code">filter</span> + <span class="inline-code">map</span></h3>
+                <h3 style="color:var(--cyan);">Task 3 &mdash; <span class="inline-code">filter</span> + <span class="inline-code">map</span></h3>
                 <p>Get names of Engineering employees only.</p>
             </div>
             <div class="card" style="border-left:4px solid var(--orange);">
-                <h3 style="color:var(--orange);">Level 4 &mdash; <span class="inline-code">reduce</span></h3>
+                <h3 style="color:var(--orange);">Task 4 &mdash; <span class="inline-code">reduce</span></h3>
                 <p>Calculate total &amp; average salary.</p>
             </div>
             <div class="card" style="border-left:4px solid var(--red);">
-                <h3 style="color:var(--red);">Level 5 (Bonus) &mdash; <span class="inline-code">reduce</span></h3>
+                <h3 style="color:var(--red);">Task 5 &mdash; <span class="inline-code">reduce</span></h3>
                 <p>Group employees by department.</p>
             </div>
         </div>
-        <p class="dim" style="font-size:.82rem;margin-top:8px;">If most reach Level 3, that's a win. Fast finishers: attempt Level 5!</p>
     </section>
 
     <!-- ══════════ SLIDE 19: Hands-on 2 Solutions ══════════ -->
@@ -924,29 +894,29 @@ person.age = <span class="num">31</span>;                     <span class="cmt">
         <div class="slide-label">Block 3 &mdash; Solutions</div>
         <h2>Hands-on 2 &mdash; Solutions</h2>
         <div class="assignment-card">
-            <h3>Levels 1&ndash;4</h3>
+            <h3>Tasks 1&ndash;4</h3>
             <button class="reveal-btn" onclick="toggleReveal('reveal-h2')">Reveal Solutions</button>
             <div id="reveal-h2" class="hidden-code">
-                <pre><code><span class="cmt">// Level 1: Extract all names</span>
+                <pre><code><span class="cmt">// Task 1: Extract all names</span>
 <span class="kw">const</span> names = employees.<span class="fn">map</span>(e <span class="op">=></span> e.name);
 <span class="cmt">// ["Alice", "Bob", "Carol", "Dave", "Eve", "Frank"]</span>
 
-<span class="cmt">// Level 2: Filter above 27</span>
+<span class="cmt">// Task 2: Filter above 27</span>
 <span class="kw">const</span> seniors = employees.<span class="fn">filter</span>(e <span class="op">=></span> e.age > <span class="num">27</span>);
 
-<span class="cmt">// Level 3: Names of Engineering employees</span>
+<span class="cmt">// Task 3: Names of Engineering employees</span>
 <span class="kw">const</span> engNames = employees
     .<span class="fn">filter</span>(e <span class="op">=></span> e.department === <span class="str">"Engineering"</span>)
     .<span class="fn">map</span>(e <span class="op">=></span> e.name);
 <span class="cmt">// ["Alice", "Carol", "Eve"]</span>
 
-<span class="cmt">// Level 4: Total &amp; average salary</span>
+<span class="cmt">// Task 4: Total &amp; average salary</span>
 <span class="kw">const</span> totalSalary = employees.<span class="fn">reduce</span>((sum, e) <span class="op">=></span> sum + e.salary, <span class="num">0</span>);
 <span class="kw">const</span> avgSalary = totalSalary / employees.length;</code></pre>
             </div>
         </div>
         <div class="assignment-card">
-            <h3>Level 5 (Bonus) &mdash; Group by department</h3>
+            <h3>Task 5 &mdash; Group by department</h3>
             <button class="reveal-btn" onclick="toggleReveal('reveal-h2-5')">Reveal Solution</button>
             <div id="reveal-h2-5" class="hidden-code">
                 <pre><code><span class="kw">const</span> grouped = employees.<span class="fn">reduce</span>((acc, e) <span class="op">=></span> {
@@ -963,7 +933,7 @@ person.age = <span class="num">31</span>;                     <span class="cmt">
     <section class="slide" data-title="Scopes">
         <div class="slide-label">Block 3 &mdash; Scope</div>
         <h2>Scopes &mdash; Where Do Variables Live?</h2>
-        <p>You've been writing <span class="inline-code">let</span> and <span class="inline-code">const</span> all morning &mdash; now let's see <em>where</em> they're visible.</p>
+        <p>Variables are not visible everywhere. Their <span class="highlight">scope</span> determines where they can be accessed.</p>
         <div class="card-grid" style="margin-top:14px;">
             <div class="card">
                 <h3>Global Scope</h3>
@@ -1129,8 +1099,8 @@ person.age = <span class="num">31</span>;                     <span class="cmt">
     <!-- ══════════ SLIDE 24: Hoisting ══════════ -->
     <section class="slide" data-title="Hoisting">
         <div class="slide-label">Block 4 &mdash; Under the Hood</div>
-        <h2>Hoisting &mdash; Predict the Output!</h2>
-        <p>Now that you know about the memory creation phase &mdash; predict what happens here:</p>
+        <h2>Hoisting</h2>
+        <p>During the <strong>memory creation phase</strong>, JS allocates space for variables and functions <em>before</em> any code runs. This means some things are available before their line in the code &mdash; this behavior is called <span class="highlight">hoisting</span>.</p>
         <div class="cols" style="margin-top:12px;">
             <div>
                 <h3>Functions are fully hoisted</h3>
@@ -1234,13 +1204,6 @@ a = <span class="kw">true</span>;     <span class="cmt">// still no error</span>
                     <li>Hoisting, TDZ, loose typing</li>
                 </ul>
             </div>
-        </div>
-        <div class="info-box" style="margin-top:20px;border-left-color:var(--orange);">
-            <strong>Next up (from 02:00):</strong> Closures depend on functions, scope, and how JS stores variables &mdash; <em>everything we covered today</em>. The next trainer will take you through <strong>Object Immutability</strong>, <strong>Closures</strong>, and <strong>Callbacks</strong> with hands-on practice.
-        </div>
-        <div style="text-align:center;margin-top:30px;">
-            <p style="font-size:1.1rem;color:var(--accent-light);font-weight:600;">Thank you! Happy coding!</p>
-            <p class="dim" style="margin-top:6px;font-size:.82rem;">Questions? Let&rsquo;s discuss!</p>
         </div>
     </section>
 
