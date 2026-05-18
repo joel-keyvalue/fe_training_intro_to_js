@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction to JavaScript — FE Training 2025</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        [data-theme="dark"] {
+            --bg: #0f0f1a;
+            --surface: #1a1a2e;
+            --surface-2: #22223a;
+            --accent: #7c5cff;
+            --accent-light: #a78bfa;
+            --accent-glow: rgba(124,92,255,.25);
+            --green: #34d399;
+            --orange: #fb923c;
+            --red: #f87171;
+            --cyan: #22d3ee;
+            --text: #e2e8f0;
+            --text-dim: #94a3b8;
+            --code-bg: #151525;
+            --border: #2a2a44;
+            --nav-bg: rgba(15,15,26,.92);
+            --info-bg: rgba(124,92,255,.08);
+            --output-bg: rgba(52,211,153,.06);
+            --toc-hover: rgba(124,92,255,.12);
+            --overlay-bg: rgba(0,0,0,.4);
+            --console-bg: #0d0d1a;
+            --code-nested-bg: rgba(0,0,0,.3);
+            --radius: 14px;
+            --h1-grad-1: #a78bfa;
+            --h1-grad-2: #22d3ee;
+            --op-color: #e879f9;
+            --strong-color: inherit;
+        }
+
+        [data-theme="light"] {
+            --bg: #f5f5fa;
+            --surface: #ffffff;
+            --surface-2: #eef0f6;
+            --accent: #6c47ff;
+            --accent-light: #6c47ff;
+            --accent-glow: rgba(108,71,255,.15);
+            --green: #16a34a;
+            --orange: #ea580c;
+            --red: #dc2626;
+            --cyan: #0891b2;
+            --text: #1e293b;
+            --text-dim: #64748b;
+            --code-bg: #f0f0f8;
+            --border: #d4d4e0;
+            --nav-bg: rgba(245,245,250,.94);
+            --info-bg: rgba(108,71,255,.06);
+            --output-bg: rgba(22,163,74,.06);
+            --toc-hover: rgba(108,71,255,.08);
+            --overlay-bg: rgba(0,0,0,.2);
+            --console-bg: #e8e8f0;
+            --code-nested-bg: rgba(0,0,0,.05);
+            --radius: 14px;
+            --h1-grad-1: #6c47ff;
+            --h1-grad-2: #0891b2;
+            --op-color: #a855f7;
+            --strong-color: #0f172a;
+        }
+
+        html { font-size: 18px; scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            overflow: hidden;
+            transition: background .35s, color .35s;
+        }
+
+        #deck { width: 100vw; height: 100vh; position: relative; }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 80px 80px 60px;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateX(60px);
+            transition: opacity .45s ease, transform .45s ease;
+            overflow-y: auto;
+        }
+        .slide.active { opacity: 1; pointer-events: auto; transform: translateX(0); }
+        .slide.exit-left { opacity: 0; transform: translateX(-60px); }
+
+        .slide-label {
+            font-size: .65rem; font-weight: 700; letter-spacing: 3px;
+            text-transform: uppercase; color: var(--accent-light); margin-bottom: 12px;
+        }
+        h1 {
+            font-size: 2.8rem; font-weight: 800; line-height: 1.15; margin-bottom: 16px;
+            background: linear-gradient(135deg, var(--h1-grad-1), var(--h1-grad-2));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        h2 { font-size: 2rem; font-weight: 700; margin-bottom: 14px; color: var(--accent-light); }
+        h3 { font-size: 1.25rem; font-weight: 600; color: var(--cyan); margin: 18px 0 8px; }
+        p, li { font-size: .95rem; color: var(--text); }
+        strong { color: var(--strong-color); }
+        ul { padding-left: 1.4em; }
+        li { margin-bottom: 6px; }
+        .dim { color: var(--text-dim); }
+        .highlight { color: var(--green); font-weight: 600; }
+        .warn { color: var(--orange); font-weight: 600; }
+        .danger { color: var(--red); font-weight: 600; }
+
+        pre {
+            background: var(--code-bg); border: 1px solid var(--border); border-radius: 10px;
+            padding: 18px 22px; margin: 12px 0 16px; overflow-x: auto;
+            font-size: .82rem; line-height: 1.7; position: relative;
+            transition: background .35s, border-color .35s;
+        }
+        code { font-family: 'Fira Code', monospace; font-size: .82rem; }
+        pre code { color: var(--text); }
+        .kw { color: var(--accent-light); }
+        .fn { color: var(--cyan); }
+        .str { color: var(--green); }
+        .cmt { color: var(--text-dim); font-style: italic; }
+        .num { color: var(--orange); }
+        .op { color: var(--op-color); }
+
+        .inline-code {
+            background: var(--surface-2); padding: 2px 8px; border-radius: 6px;
+            font-family: 'Fira Code', monospace; font-size: .82rem; color: var(--cyan);
+            transition: background .35s;
+        }
+
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; margin: 16px 0; }
+        .card {
+            background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+            padding: 22px 24px; transition: border-color .3s, box-shadow .3s, background .35s;
+        }
+        .card:hover { border-color: var(--accent); box-shadow: 0 0 24px var(--accent-glow); }
+        .card h3 { margin-top: 0; }
+
+        .info-box {
+            background: var(--info-bg); border-left: 4px solid var(--accent);
+            border-radius: 0 var(--radius) var(--radius) 0; padding: 16px 20px; margin: 14px 0;
+            transition: background .35s;
+        }
+        .output-box {
+            background: var(--output-bg); border-left: 4px solid var(--green);
+            border-radius: 0 10px 10px 0; padding: 12px 18px; margin: 6px 0 14px;
+            font-family: 'Fira Code', monospace; font-size: .82rem; color: var(--green);
+            transition: background .35s;
+        }
+
+        .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin: 14px 0; }
+        .cols > div { min-width: 0; }
+
+        #nav-bar {
+            position: fixed; bottom: 0; left: 0; right: 0; height: 56px;
+            background: var(--nav-bg); backdrop-filter: blur(12px);
+            border-top: 1px solid var(--border); display: flex; align-items: center;
+            justify-content: space-between; padding: 0 32px; z-index: 100;
+            transition: background .35s, border-color .35s;
+        }
+        #nav-bar button {
+            background: var(--surface-2); border: 1px solid var(--border); color: var(--text);
+            font-family: 'Inter', sans-serif; font-size: .8rem; font-weight: 600;
+            padding: 8px 22px; border-radius: 8px; cursor: pointer;
+            transition: background .2s, border-color .2s, color .2s;
+        }
+        #nav-bar button:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+        #nav-bar button:disabled {
+            opacity: .3; cursor: default; background: var(--surface-2);
+            border-color: var(--border); color: var(--text);
+        }
+        #progress {
+            position: fixed; top: 0; left: 0; height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--cyan));
+            transition: width .4s ease; z-index: 101;
+        }
+        #slide-counter { font-size: .75rem; color: var(--text-dim); font-variant-numeric: tabular-nums; }
+
+        #toc-toggle {
+            position: fixed; top: 18px; left: 18px; z-index: 200;
+            background: var(--surface-2); border: 1px solid var(--border); color: var(--text);
+            width: 40px; height: 40px; border-radius: 10px; font-size: 1.1rem; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: background .2s, border-color .35s, color .35s;
+        }
+        #toc-toggle:hover { background: var(--accent); color: #fff; }
+        #toc {
+            position: fixed; top: 0; left: 0; width: 320px; height: 100vh;
+            background: var(--surface); border-right: 1px solid var(--border); z-index: 199;
+            transform: translateX(-100%); transition: transform .35s ease, background .35s, border-color .35s;
+            padding: 70px 24px 24px; overflow-y: auto;
+        }
+        #toc.open { transform: translateX(0); }
+        #toc h4 { font-size: .7rem; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-light); margin-bottom: 14px; }
+        #toc ul { list-style: none; padding: 0; }
+        #toc li {
+            padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: .8rem;
+            color: var(--text-dim); transition: background .2s, color .2s; margin-bottom: 2px;
+        }
+        #toc li:hover, #toc li.active { background: var(--toc-hover); color: var(--text); }
+        #toc li.active { border-left: 3px solid var(--accent); }
+        #toc-overlay { position: fixed; inset: 0; background: var(--overlay-bg); z-index: 198; display: none; }
+        #toc.open ~ #toc-overlay { display: block; }
+
+        #theme-toggle {
+            position: fixed; top: 18px; right: 18px; z-index: 200;
+            background: var(--surface-2); border: 1px solid var(--border); color: var(--text);
+            width: 40px; height: 40px; border-radius: 10px; font-size: 1.15rem; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: background .2s, border-color .35s, color .35s; line-height: 1;
+        }
+        #theme-toggle:hover { background: var(--accent); color: #fff; }
+
+        .assignment-card {
+            background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+            padding: 24px 28px; margin: 14px 0; border-left: 4px solid var(--orange);
+            transition: background .35s, border-color .35s;
+        }
+        .assignment-card h3 { color: var(--orange); margin-top: 0; }
+
+        .reveal-btn {
+            background: var(--orange); color: #fff; border: none; padding: 10px 24px;
+            border-radius: 8px; font-size: .85rem; font-weight: 600; cursor: pointer;
+            font-family: 'Inter', sans-serif; transition: background .2s, transform .15s; margin: 14px 0 4px;
+        }
+        .reveal-btn:hover { background: var(--accent); transform: scale(1.03); }
+        .hidden-code { display: none; }
+        .hidden-code.visible { display: block; }
+
+        .tag-pill {
+            background: var(--surface); padding: 8px 18px; border-radius: 8px; font-size: .8rem;
+            border: 1px solid var(--border); transition: background .35s, border-color .35s;
+        }
+        .top-bar-backdrop {
+            position: fixed; top: 0; left: 0; right: 0; height: 62px;
+            background: var(--bg); z-index: 99; pointer-events: none; transition: background .35s;
+        }
+        .watermark {
+            position: fixed; top: 38px; left: 68px; transform: translateY(-50%);
+            width: 150px; height: auto; opacity: .9; pointer-events: none; z-index: 201;
+        }
+        .ref-diagram {
+            margin-top: 14px; padding: 18px; background: var(--surface); border-radius: 10px;
+            text-align: center; font-family: 'Fira Code', monospace; font-size: .8rem;
+            border: 1px solid var(--border); transition: background .35s, border-color .35s;
+        }
+        .block-label {
+            display: inline-block; background: var(--accent); color: #fff; padding: 4px 14px;
+            border-radius: 6px; font-size: .7rem; font-weight: 700; letter-spacing: 1px;
+            text-transform: uppercase; margin-bottom: 10px;
+        }
+
+        @media (max-width: 900px) {
+            .slide { padding: 70px 28px 40px; }
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.5rem; }
+            .cols { grid-template-columns: 1fr; }
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    </style>
+</head>
+<body>
+
+<div id="progress"></div>
+<div class="top-bar-backdrop"></div>
+
+<button id="toc-toggle" onclick="toggleToc()">&#9776;</button>
+<button id="theme-toggle" onclick="toggleTheme()" title="Toggle light / dark mode">&#9790;</button>
+<nav id="toc">
+    <h4>Contents</h4>
+    <ul id="toc-list"></ul>
+</nav>
+<div id="toc-overlay" onclick="toggleToc()"></div>
+
+<div id="deck">
+
+    <!-- ══════════ SLIDE 0: Title ══════════ -->
+    <section class="slide" data-title="Welcome">
+        <div class="slide-label">FE Training 2025</div>
+        <h1>Introduction to JavaScript</h1>
+        <p class="dim" style="font-size:1.05rem; margin-top:8px;">From syntax fundamentals to how the engine runs your code.</p>
+        <div style="margin-top:32px; display:flex; gap:14px; flex-wrap:wrap;">
+            <span class="tag-pill">Variables &amp; Types</span>
+            <span class="tag-pill">Functions</span>
+            <span class="tag-pill">Arrays &amp; Objects</span>
+            <span class="tag-pill">Scope</span>
+            <span class="tag-pill">Hoisting &amp; Call Stack</span>
+        </div>
+        <p class="dim" style="margin-top:40px;font-size:.82rem;">
+            Trainer: <strong>Joel Joseph Paul</strong><br>
+            Use <span class="inline-code">Arrow Keys</span> or the buttons below to navigate &bull; Press <span class="inline-code">M</span> for menu
+        </p>
+    </section>
+
+    <!-- ══════════ SLIDE 1: Day Overview ══════════ -->
+    <section class="slide" data-title="Day Overview">
+        <div class="slide-label">Getting Started</div>
+        <h2>How Today Works</h2>
+        <div class="cols">
+            <div>
+                <h3>Morning &mdash; Concepts + Practice</h3>
+                <ul>
+                    <li><span class="block-label">Block 1</span> 09:30 &ndash; 10:30 &mdash; What is JS, syntax basics</li>
+                    <li style="color:var(--text-dim);font-size:.85rem;">15 min break</li>
+                    <li><span class="block-label">Block 2</span> 10:45 &ndash; 11:30 &mdash; Functions + <span class="warn">Hands-on 1</span></li>
+                    <li><span class="block-label">Block 3</span> 11:30 &ndash; 12:30 &mdash; Arrays, Objects + <span class="warn">Hands-on 2</span> + Scope</li>
+                </ul>
+                <h3 style="margin-top:18px;">After Lunch</h3>
+                <ul>
+                    <li><span class="block-label">Block 4</span> 01:30 &ndash; 02:00 &mdash; How JS runs under the hood</li>
+                    <li style="color:var(--text-dim);font-size:.85rem;">02:00 &rarr; Handover &rarr; Immutability, Closures &amp; Callbacks</li>
+                </ul>
+            </div>
+            <div>
+                <div class="info-box">
+                    <strong>Your goal by end of today:</strong>
+                    <ul style="margin-top:8px;">
+                        <li>Read and write basic JS (variables, functions, loops)</li>
+                        <li>Transform data with <span class="inline-code">map</span>, <span class="inline-code">filter</span>, <span class="inline-code">reduce</span></li>
+                        <li>Understand <em>where</em> variables live (scope)</li>
+                        <li>Know <em>how</em> JS executes your code (call stack, hoisting)</li>
+                    </ul>
+                </div>
+                <div class="info-box" style="border-left-color:var(--orange);">
+                    <strong>Setup:</strong> VS Code + <span class="inline-code">Live Server</span> extension.<br>
+                    <span class="danger">Warning:</span> Never run <span class="inline-code">while(true)</span> in the browser &mdash; it will hang your tab!
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════ SLIDE 2: Context ══════════ -->
+    <section class="slide" data-title="HTML, Java & JS">
+        <div class="slide-label">Block 1 &mdash; Context</div>
+        <h2>Setting the Stage</h2>
+        <div class="card-grid">
+            <div class="card">
+                <h3>HTML is <em>not</em> a programming language</h3>
+                <p><span class="highlight">HTML</span> structures content. <span class="highlight">CSS</span> styles it. <span class="highlight">JavaScript</span> executes logic.</p>
+                <p style="margin-top:8px;" class="dim">HTML has no loops, no conditionals, no functions &mdash; it's declarative markup, not computation.</p>
+            </div>
+            <div class="card">
+                <h3>Java &ne; JavaScript</h3>
+                <p>Completely different languages. The similar name was a <span class="warn">marketing decision</span> by Netscape in 1995 to ride Java's hype wave.</p>
+                <p style="margin-top:8px;" class="dim">JavaScript was originally called "Mocha", then "LiveScript", before the rebrand.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════ SLIDE 3: What is JavaScript ══════════ -->
+    <section class="slide" data-title="What is JavaScript?">
+        <div class="slide-label">Block 1 &mdash; Overview</div>
+        <h2>What is JavaScript?</h2>
+        <div class="card-grid">
+            <div class="card">
+                <h3>Interpreted</h3>
+                <p>No compilation step &mdash; the engine reads and executes your code line by line.</p>
+            </div>
+            <div class="card">
+                <h3>First-Class Functions</h3>
+                <p>Functions are values. You can store them in variables, pass them around, and return them.</p>
+            </div>
+            <div class="card">
+                <h3>Single-Threaded</h3>
+                <p>One command at a time, one call stack. (Async patterns work <em>around</em> this, not against it.)</p>
+            </div>
+            <div class="card">
+                <h3>Runs Everywhere</h3>
+                <p><strong>Client-side</strong> (browser) and <strong>server-side</strong> (Node.js, Deno, Bun).</p>
+            </div>
+        </div>
+        <div class="info-box" style="margin-top:10px;">
+            <strong>One-liner:</strong> JavaScript is a versatile, cross-platform, object-oriented scripting language that powers both the web browser and the server.
+        </div>
+    </section>
+
+    <!-- ══════════ SLIDE 4: Console ══════════ -->
+    <section class="slide" data-title="Console">
+        <div class="slide-label">Block 1 &mdash; Console</div>
+        <h2>Console &mdash; Your Debugging Best Friend</h2>
+        <p>Open your browser&rsquo;s DevTools (<span class="inline-code">F12</span> or <span class="inline-code">Ctrl+Shift+J</span>) and try these:</p>
+        <div class="cols" style="margin-top:14px;">
+            <div>
+                <pre><code><span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Hello, JavaScript!"</span>);
+<span class="cmt">// General output</span>
+
+<span class="fn">console</span>.<span class="fn">error</span>(<span class="str">"Something broke!"</span>);
+<span class="cmt">// Red error message</span>
+
+<span class="fn">console</span>.<span class="fn">warn</span>(<span class="str">"Careful here..."</span>);
+<span class="cmt">// Yellow warning message</span></code></pre>
+            </div>
+            <div>
+                <div class="info-box">
+                    <strong>When to use which?</strong>
+                    <ul style="margin-top:6px;">
+                        <li><span class="inline-code">console.log()</span> &mdash; general debugging, inspecting values</li>
+                        <li><span class="inline-code">console.error()</span> &mdash; error messages (shows red in DevTools)</li>
+                        <li><span class="inline-code">console.warn()</span> &mdash; warnings (shows yellow)</li>
+                    </ul>
+                </div>
+                <p class="dim" style="font-size:.85rem;margin-top:10px;">You'll use <span class="inline-code">console.log()</span> constantly. It's how you "see" what your code is doing.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════ SLIDE 5: Data Types ══════════ -->
+    <section class="slide" data-title="Data Types">
+        <div class="slide-label">Block 1 &mdash; Types &amp; Variables</div>
+        <h2>Data Types in JavaScript</h2>
+        <div class="cols">
+            <div>
+                <h3>Primitive Types (immutable)</h3>
+                <pre><code><span class="kw">let</span> name    = <span class="str">"Alice"</span>;       <span class="cmt">// String</span>
+<span class="kw">let</span> age     = <span class="num">25</span>;            <span class="cmt">// Number</span>
+<span class="kw">let</span> active  = <span class="kw">true</span>;          <span class="cmt">// Boolean</span>
+<span class="kw">let</span> nothing = <span class="kw">null</span>;          <span class="cmt">// Null</span>
+<span class="kw">let</span> x;                        <span class="cmt">// Undefined</span>
+<span class="kw">let</span> id      = <span class="fn">Symbol</span>(<span class="str">"id"</span>); <span class="cmt">// Symbol</span>
+<span class="kw">let</span> big     = <span class="num">9007199254740991n</span>; <span class="cmt">// BigInt</span></code></pre>
+            </div>
+            <div>
+                <h3>Non-Primitive Types (mutable, by reference)</h3>
+                <pre><code><span class="kw">let</span> arr  = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>];           <span class="cmt">// Array</span>
+<span class="kw">let</span> obj  = { name: <span class="str">"Bob"</span> };     <span class="cmt">// Object</span>
+<span class="kw">let</span> fn   = <span class="kw">function</span>() {};       <span class="cmt">// Function</span></code></pre>
+                <div class="info-box" style="margin-top:12px;">
+                    <strong>Key difference:</strong> Primitives are stored <em>by value</em>. Non-primitives are stored <em>by reference</em> &mdash; two variables can point to the same object.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════ SLIDE 6: typeof & instanceof ══════════ -->
+    <section class="slide" data-title="typeof & instanceof">
+        <div class="slide-label">Block 1 &mdash; Types &amp; Variables</div>
+        <h2>Determining Data Types</h2>
+        <div class="cols">
+            <div>
+                <h3><span class="inline-code">typeof</span> &mdash; for primitives</h3>
+                <pre><code><span class="kw">typeof</span> <span class="str">"hello"</span>    <span class="cmt">// "string"</span>
+<span class="kw">typeof</span> <span class="num">42</span>          <span class="cmt">// "number"</span>
+<span class="kw">typeof</span> <span class="kw">true</span>        <span class="cmt">// "boolean"</span>
+<span class="kw">typeof</span> <span class="kw">undefined</span>   <span class="cmt">// "undefined"</span>
+<span class="kw">typeof</span> <span class="kw">null</span>        <span class="cmt">// "object" &larr; famous JS bug!</span>
+<span class="kw">typeof</span> {}          <span class="cmt">// "object"</span>
+<span class="kw">typeof</span> []          <span class="cmt">// "object"</span>
+<span class="kw">typeof</span> <span class="kw">function</span>(){} <span class="cmt">// "function"</span></code></pre>
+            </div>
+            <div>
+                <h3><span class="inline-code">instanceof</span> &mdash; for non-primitives</h3>
+                <pre><code><span class="kw">const</span> arr = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>];
+arr <span class="kw">instanceof</span> Array   <span class="cmt">// true</span>
+arr <span class="kw">instanceof</span> Object  <span class="cmt">// true</span>
+
+<span class="kw">const</span> obj = { a: <span class="num">1</span> };
+obj <span class="kw">instanceof</span> Object  <span class="cmt">// true</span>
+obj <span class="kw">instanceof</span> Array   <span class="cmt">// false</span></code></pre>
+                <div class="info-box" style="margin-top:12px;">
+                    <strong>Rule of thumb:</strong> Use <span class="inline-code">typeof</span> for primitives, <span class="inline-code">instanceof</span> for objects/arrays. And yes, <span class="inline-code">typeof null === "object"</span> is a 30-year-old bug that will never be fixed.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════ SLIDE 7: Variables ══════════ -->
+    <section class="slide" data-title="Variables">
+        <div class="slide-label">Block 1 &mdash; Types &amp; Variables</div>
+        <h2>Variables &mdash; <span class="inline-code">var</span>, <span class="inline-code">let</span>, <span class="inline-code">const</span></h2>
+        <div class="cols">
+            <div>
+                <pre><code><span class="kw">var</span> x = <span class="num">10</span>;     <span class="cmt">// old way, function-scoped</span>
+<span class="kw">let</span> y = <span class="num">20</span>;     <span class="cmt">// modern, block-scoped, reassignable</span>
+<span class="kw">const</span> z = <span class="num">30</span>;   <span class="cmt">// modern, block-scoped, NOT reassignable</span>
+
+y = <span class="num">25</span>;          <span class="cmt">// OK</span>
+z = <span class="num">35</span>;          <span class="cmt">// TypeError: Assignment to constant</span></code></pre>
+                <div class="info-box" style="margin-top:12px;">
+                    <strong>Best practice:</strong> Default to <span class="inline-code">const</span>. Use <span class="inline-code">let</span> only when you need to reassign. Avoid <span class="inline-code">var</span> in new code.
+                </div>
+            </div>
+            <div>
+                <h3>Naming Rules</h3>
+                <ul>
+                    <li>Can contain letters, digits, <span class="inline-code">_</span>, <span class="inline-code">$</span></li>
+                    <li>Must start with a letter, <span class="inline-code">_</span>, or <span class="inline-code">$</span></li>
+                    <li>Case-sensitive: <span class="inline-code">myVar</span> &ne; <span class="inline-code">myvar</span></li>
+                    <li>Can&rsquo;t use reserved keywords (<span class="inline-code">let</span>, <span class="inline-code">const</span>, <span class="inline-code">function</span> &hellip;)</li>
+                </ul>
+                <pre><code><span class="kw">let</span> userName  = <span class="str">"Alice"</span>;   <span class="cmt">// &#10004; camelCase</span>
+<span class="kw">let</span> _private  = <span class="num">42</span>;        <span class="cmt">// &#10004;</span>
+<span class="kw">let</span> $element  = <span class="kw">null</span>;      <span class="cmt">// &#10004;</span>
+<span class="kw">let</span> <span class="num">2</span>fast     = <span class="str">"no"</span>;      <span class="cmt">// &#10008; starts with digit</span></code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════ SLIDE 8: Operators ══════════ -->
+    <section class="slide" data-title="Operators">
+        <div class="slide-label">Block 1 &mdash; Operators</div>
+        <h2>Operators</h2>
+        <div class="cols">
+            <div>
+                <h3>Arithmetic &amp; Assignment</h3>
+                <pre><code><span class="num">10</span> + <span class="num">3</span>    <span class="cmt">// 13</span>
+<span class="num">10</span> - <span class="num">3</span>    <span class="cmt">// 7</span>
+<span class="num">10</span> * <span class="num">3</span>    <span class="cmt">// 30</span>
+<span class="num">10</span> / <span class="num">3</span>    <span class="cmt">// 3.333...</span>
+<span class="num">10</span> % <span class="num">3</span>    <span class="cmt">// 1 (remainder)</span>
+
+<span class="kw">let</span> a = <span class="num">5</span>;
+a += <span class="num">3</span>;   <span class="cmt">// a is now 8</span>
+a++;      <span class="cmt">// a is now 9</span></code></pre>
+                <h3>Logical</h3>
+                <pre><code><span class="kw">true</span> <span class="op">&amp;&amp;</span> <span class="kw">false</span>   <span class="cmt">// false (AND)</span>
+<span class="kw">true</span> <span class="op">||</span> <span class="kw">false</span>   <span class="cmt">// true  (OR)</span>
+<span class="op">!</span><span class="kw">true</span>            <span class="cmt">// false (NOT)</span></code></pre>
+            </div>
+            <div>
+                <h3>Comparison &mdash; <span class="danger"><span class="inline-code">==</span> vs <span class="inline-code">===</span></span></h3>
+                <pre><code><span class="num">5</span> <span class="op">==</span>  <span class="str">"5"</span>    <span class="cmt">// true  (loose: coerces types)</span>
+<span class="num">5</span> <span class="op">===</span> <span class="str">"5"</span>    <span class="cmt">// false (strict: different types)</span>
+<span class="num">5</span> <span class="op">===</span> <span class="num">5</span>      <span class="cmt">// true</span>
+
+<span class="num">0</span> <span class="op">==</span>  <span class="kw">false</span>  <span class="cmt">// true  (surprise!)</span>
+<span class="num">0</span> <span class="op">===</span> <span class="kw">false</span>  <span class="cmt">// false (expected)</span>
+
+<span class="kw">null</span> <span class="op">==</span>  <span class="kw">undefined</span> <span class="cmt">// true</span>
+<span class="kw">null</span> <span class="op">===</span> <span class="kw">undefined</span> <span class="cmt">// false</span></code></pre>
+                <div class="info-box" style="margin-top:12px;">
+                    <strong>Always use <span class="inline-code">===</span></strong> (strict equality). The loose <span class="inline-code">==</span> operator coerces types in confusing ways and is a common source of bugs.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════ SLIDE 9: Control Flow ══════════ -->
+    <section class="slide" data-title="Control Flow">
+        <div class="slide-label">Block 1 &mdash; Control Flow</div>
+        <h2>Conditional Statements</h2>
+        <div class="cols">
+            <div>
+                <h3><span class="inline-code">if</span> / <span class="inline-code">else if</span> / <span class="inline-code">else</span></h3>
+                <pre><code><span class="kw">let</span> score = <span class="num">85</span>;
+
+<span class="kw">if</span> (score >= <span class="num">90</span>) {
+    <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"A grade"</span>);
+} <span class="kw">else if</span> (score >= <span class="num">80</span>) {
+    <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"B grade"</span>);
+} <span class="kw">else</span> {
+    <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Keep going!"</span>);
+}</code></pre>
+                <div class="output-box">B grade</div>
+            </div>
+            <div>
+                <h3><span class="inline-code">switch</span></h3>
+                <pre><code><span class="kw">let</span> day = <span class="str">"Monday"</span>;
+
+<span class="kw">switch</span> (day) {
+    <span class="kw">case</span> <span class="str">"Monday"</span>:
+        <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Start of the week"</span>);
+        <span class="kw">break</span>;
+    <span class="kw">case</span> <span class="str">"Friday"</span>:
+        <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Almost weekend!"</span>);
+        <span class="kw">break</span>;
+    <span class="kw">default</span>:
+        <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Regular day"</span>);
+}</code></pre>
+                <div class="output-box">Start of the week</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════ SLIDE 10: Loops ══════════ -->
+    <section class="slide" data-title="Loops">
+        <div class="slide-label">Block 1 &mdash; Loops</div>
+        <h2>Loops</h2>
+        <div class="cols">
+            <div>
+                <h3><span class="inline-code">for</span> / <span class="inline-code">while</span> / <span class="inline-code">do...while</span></h3>
+                <pre><code><span class="kw">for</span> (<span class="kw">let</span> i = <span class="num">0</span>; i < <span class="num">3</span>; i++) {
+    <span class="fn">console</span>.<span class="fn">log</span>(i);  <span class="cmt">// 0, 1, 2</span>
+}
+
+<span class="kw">let</span> n = <span class="num">3</span>;
+<span class="kw">while</span> (n > <span class="num">0</span>) {
+    <span class="fn">console</span>.<span class="fn">log</span>(n);  <span class="cmt">// 3, 2, 1</span>
+    n--;
+}
+
+<span class="kw">do</span> {
+    <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"runs at least once"</span>);
+} <span class="kw">while</span> (<span class="kw">false</span>);</code></pre>
+            </div>
+            <div>
+                <h3><span class="inline-code">for...of</span> (arrays) vs <span class="inline-code">for...in</span> (objects)</h3>
+                <pre><code><span class="kw">const</span> colors = [<span class="str">"red"</span>, <span class="str">"green"</span>, <span class="str">"blue"</span>];
+<span class="kw">for</span> (<span class="kw">const</span> color <span class="kw">of</span> colors) {
+    <span class="fn">console</span>.<span class="fn">log</span>(color);
+}
+<span class="cmt">// "red", "green", "blue" (values)</span>
+
+<span class="kw">const</span> person = { name: <span class="str">"Alice"</span>, age: <span class="num">25</span> };
+<span class="kw">for</span> (<span class="kw">const</span> key <span class="kw">in</span> person) {
+    <span class="fn">console</span>.<span class="fn">log</span>(key, person[key]);
+}
+<span class="cmt">// "name" "Alice", "age" 25 (keys)</span></code></pre>
+                <div class="info-box" style="margin-top:8px;">
+                    <strong>Remember:</strong> <span class="inline-code">for...of</span> &rarr; <strong>values</strong> (arrays, strings). <span class="inline-code">for...in</span> &rarr; <strong>keys</strong> (objects). You'll practice this in Hands-on 1!
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════ SLIDE 11: Functions — Declaration vs Expression ══════════ -->
+    <section class="slide" data-title="Functions: Declaration vs Expression">
+        <div class="slide-label">Block 2 &mdash; Functions</div>
+        <h2>Functions</h2>
+        <div class="cols">
+            <div>
+                <h3>Function Declaration (Statement)</h3>
+                <pre><code><span class="kw">function</span> <span class="fn">greet</span>(name) {
+    <span class="kw">return</span> <span class="str">"Hello, "</span> + name;
+}
+
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="fn">greet</span>(<span class="str">"Alice"</span>));</code></pre>
+                <div class="output-box">Hello, Alice</div>
+                <p class="dim" style="font-size:.82rem;">Declarations are <span class="highlight">hoisted</span> &mdash; you can call them before they appear in code. (We'll see why in Block 4.)</p>
+            </div>
+            <div>
+                <h3>Function Expression</h3>
+                <pre><code><span class="cmt">// Named expression</span>
+<span class="kw">const</span> add = <span class="kw">function</span> <span class="fn">addNumbers</span>(a, b) {
+    <span class="kw">return</span> a + b;
+};
+
+<span class="cmt">// Anonymous expression</span>
+<span class="kw">const</span> multiply = <span class="kw">function</span>(a, b) {
+    <span class="kw">return</span> a * b;
+};
+
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="fn">add</span>(<span class="num">3</span>, <span class="num">4</span>));      <span class="cmt">// 7</span>
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="fn">multiply</span>(<span class="num">3</span>, <span class="num">4</span>)); <span class="cmt">// 12</span></code></pre>
+                <p class="dim" style="font-size:.82rem;">Expressions are <span class="danger">NOT hoisted</span> &mdash; they behave like regular variables.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════ SLIDE 12: Arrow Functions ══════════ -->
+    <section class="slide" data-title="Arrow Functions">
+        <div class="slide-label">Block 2 &mdash; Functions</div>
+        <h2>Arrow Functions (ES6)</h2>
+        <p>A shorter syntax for writing functions. Introduced in ES6.</p>
+        <div class="cols" style="margin-top:14px;">
+            <div>
+                <h3>Converting step by step</h3>
+                <pre><code><span class="cmt">// Regular function</span>
+<span class="kw">const</span> square = <span class="kw">function</span>(n) {
+    <span class="kw">return</span> n * n;
+};
+
+<span class="cmt">// Arrow function</span>
+<span class="kw">const</span> square = (n) <span class="op">=></span> {
+    <span class="kw">return</span> n * n;
+};
+
+<span class="cmt">// Concise (single expression = implicit return)</span>
+<span class="kw">const</span> square = n <span class="op">=></span> n * n;</code></pre>
+            </div>
+            <div>
+                <h3>More examples</h3>
+                <pre><code><span class="cmt">// No parameters</span>
+<span class="kw">const</span> sayHi = () <span class="op">=></span> <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Hi!"</span>);
+
+<span class="cmt">// Multiple parameters</span>
+<span class="kw">const</span> add = (a, b) <span class="op">=></span> a + b;
+
+<span class="cmt">// Multi-line body (need braces + return)</span>
+<span class="kw">const</span> getUser = (name) <span class="op">=></span> {
+    <span class="kw">const</span> greeting = <span class="str">"Hello, "</span> + name;
+    <span class="kw">return</span> greeting;
+};</code></pre>
+                <div class="info-box" style="margin-top:10px;">
+                    Arrow functions are concise and great for callbacks. You'll use them a lot with array methods.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════ SLIDE 13: First-Class Functions ══════════ -->
+    <section class="slide" data-title="First-Class Functions">
+        <div class="slide-label">Block 2 &mdash; Functions</div>
+        <h2>First-Class Functions</h2>
+        <p>In JavaScript, functions are <span class="highlight">first-class citizens</span> &mdash; they can be used like any other value.</p>
+        <div class="cols" style="margin-top:12px;">
+            <div>
+                <h3>Store in a variable</h3>
+                <pre><code><span class="kw">const</span> greet = (name) <span class="op">=></span> <span class="str">`Hello, ${name}!`</span>;
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="fn">greet</span>(<span class="str">"Alice"</span>));</code></pre>
+                <h3>Pass as an argument</h3>
+                <pre><code><span class="kw">function</span> <span class="fn">doTwice</span>(fn) {
+    <span class="fn">fn</span>();
+    <span class="fn">fn</span>();
+}
+<span class="fn">doTwice</span>(() <span class="op">=></span> <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Hi!"</span>));
+<span class="cmt">// "Hi!" "Hi!"</span></code></pre>
+            </div>
+            <div>
+                <h3>Return from a function</h3>
+                <pre><code><span class="kw">function</span> <span class="fn">multiplier</span>(factor) {
+    <span class="kw">return</span> (n) <span class="op">=></span> n * factor;
+}
+
+<span class="kw">const</span> double = <span class="fn">multiplier</span>(<span class="num">2</span>);
+<span class="kw">const</span> triple = <span class="fn">multiplier</span>(<span class="num">3</span>);
+
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="fn">double</span>(<span class="num">5</span>));  <span class="cmt">// 10</span>
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="fn">triple</span>(<span class="num">5</span>));  <span class="cmt">// 15</span></code></pre>
+                <div class="info-box" style="margin-top:10px;">
+                    This is powerful! It means you can write functions that <em>create</em> other functions, and pass logic around like data.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════ SLIDE 14: Hands-on 1 ══════════ -->
+    <section class="slide" data-title="Hands-on 1">
+        <div class="slide-label">Block 2 &mdash; Practice Time (~25 min)</div>
+        <h2>Hands-on 1 &mdash; Loops, Functions &amp; Callbacks</h2>
+
+        <div class="assignment-card">
+            <h3>Exercise 1 &mdash; <span class="inline-code">for...of</span> vs <span class="inline-code">for...in</span> (8 min)</h3>
+            <p>You have an array of scores and an object of subjects. Print each value. Notice what works where.</p>
+            <pre><code><span class="kw">const</span> scores = [<span class="num">10</span>, <span class="num">25</span>, <span class="num">30</span>, <span class="num">5</span>, <span class="num">18</span>];
+<span class="kw">const</span> grades = { math: <span class="num">90</span>, english: <span class="num">75</span>, science: <span class="num">88</span> };
+
+<span class="cmt">// Print each score from the array</span>
+<span class="cmt">// Print each subject and its score from the object</span></code></pre>
+            <button class="reveal-btn" onclick="toggleReveal('reveal-h1-1')">Reveal Hint</button>
+            <div id="reveal-h1-1" class="hidden-code">
+                <pre><code><span class="kw">for</span> (<span class="kw">const</span> score <span class="kw">of</span> scores) { <span class="fn">console</span>.<span class="fn">log</span>(score); }
+<span class="kw">for</span> (<span class="kw">const</span> subject <span class="kw">in</span> grades) { <span class="fn">console</span>.<span class="fn">log</span>(subject, grades[subject]); }</code></pre>
+            </div>
+        </div>
+
+        <div class="assignment-card">
+            <h3>Exercise 2 &mdash; Extract a function (8 min)</h3>
+            <p>Calculate the total for several price arrays. Stop copy-pasting &mdash; <strong>make it a function</strong>.</p>
+            <pre><code><span class="kw">const</span> prices1 = [<span class="num">250</span>, <span class="num">120</span>, <span class="num">80</span>];
+<span class="kw">const</span> prices2 = [<span class="num">500</span>, <span class="num">60</span>, <span class="num">340</span>];
+<span class="kw">const</span> prices3 = [<span class="num">90</span>, <span class="num">45</span>, <span class="num">200</span>, <span class="num">150</span>];
+<span class="cmt">// Write a function getTotal(prices) and call it for each</span></code></pre>
+        </div>
+
+        <div class="assignment-card">
+            <h3>Exercise 3 &mdash; Pass a function as argument (9 min)</h3>
+            <p>Same arrays, but sometimes you want the <strong>total</strong>, sometimes the <strong>count of items above 100</strong>. Write ONE function that takes the array and a "what to do" function.</p>
+            <button class="reveal-btn" onclick="toggleReveal('reveal-h1-3')">Reveal Hint</button>
+            <div id="reveal-h1-3" class="hidden-code">
+                <pre><code><span class="kw">function</span> <span class="fn">processArray</span>(arr, processFn) {
+    <span class="kw">let</span> result = <span class="num">0</span>;
+    <span class="kw">for</span> (<span class="kw">const</span> item <span class="kw">of</span> arr) { result = <span class="fn">processFn</span>(result, item); }
+    <span class="kw">return</span> result;
+}
+<span class="fn">processArray</span>(prices1, (sum, p) <span class="op">=></span> sum + p);          <span class="cmt">// total</span>
+<span class="fn">processArray</span>(prices1, (count, p) <span class="op">=></span> p > <span class="num">100</span> ? count + <span class="num">1</span> : count); <span class="cmt">// count above 100</span></code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════ SLIDE 15: Arrays Basics ══════════ -->
+    <section class="slide" data-title="Arrays">
+        <div class="slide-label">Block 3 &mdash; Arrays</div>
+        <h2>Arrays</h2>
+        <div class="cols">
+            <div>
+                <h3>Creating &amp; accessing</h3>
+                <pre><code><span class="kw">const</span> fruits = [<span class="str">"apple"</span>, <span class="str">"banana"</span>, <span class="str">"cherry"</span>];
+
+<span class="fn">console</span>.<span class="fn">log</span>(fruits[<span class="num">0</span>]);       <span class="cmt">// "apple"</span>
+<span class="fn">console</span>.<span class="fn">log</span>(fruits.length);  <span class="cmt">// 3</span>
+
+<span class="cmt">// Arrays can hold mixed types</span>
+<span class="kw">const</span> mixed = [<span class="num">1</span>, <span class="str">"two"</span>, <span class="kw">true</span>, <span class="kw">null</span>];</code></pre>
+            </div>
+            <div>
+                <h3>Adding &amp; removing</h3>
+                <pre><code><span class="kw">const</span> nums = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>];
+
+nums.<span class="fn">push</span>(<span class="num">4</span>);        <span class="cmt">// add to end    → [1, 2, 3, 4]</span>
+nums.<span class="fn">pop</span>();          <span class="cmt">// remove from end → [1, 2, 3]</span>
+
+nums.<span class="fn">unshift</span>(<span class="num">0</span>);     <span class="cmt">// add to start → [0, 1, 2, 3]</span>
+nums.<span class="fn">shift</span>();        <span class="cmt">// remove from start → [1, 2, 3]</span></code></pre>
+                <p class="dim" style="font-size:.82rem;margin-top:8px;">Other useful methods: <span class="inline-code">includes()</span>, <span class="inline-code">indexOf()</span>, <span class="inline-code">slice()</span>, <span class="inline-code">splice()</span>, <span class="inline-code">join()</span>, <span class="inline-code">reverse()</span>, <span class="inline-code">sort()</span> &mdash; see <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" target="_blank" style="color:var(--cyan);">MDN</a>.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════ SLIDE 16: Array Methods ══════════ -->
+    <section class="slide" data-title="Array Methods: map, filter, reduce">
+        <div class="slide-label">Block 3 &mdash; Array Methods</div>
+        <h2>The Big Three: <span class="inline-code">map</span>, <span class="inline-code">filter</span>, <span class="inline-code">reduce</span></h2>
+        <div class="cols">
+            <div>
+                <h3><span class="inline-code">map</span> &mdash; transform each item</h3>
+                <pre><code><span class="kw">const</span> nums = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>];
+<span class="kw">const</span> doubled = nums.<span class="fn">map</span>(n <span class="op">=></span> n * <span class="num">2</span>);
+<span class="cmt">// [2, 4, 6, 8]</span></code></pre>
+                <h3><span class="inline-code">filter</span> &mdash; keep items that match</h3>
+                <pre><code><span class="kw">const</span> evens = nums.<span class="fn">filter</span>(n <span class="op">=></span> n % <span class="num">2</span> === <span class="num">0</span>);
+<span class="cmt">// [2, 4]</span></code></pre>
+                <h3><span class="inline-code">forEach</span> &mdash; just loop (no return)</h3>
+                <pre><code>nums.<span class="fn">forEach</span>(n <span class="op">=></span> <span class="fn">console</span>.<span class="fn">log</span>(n));</code></pre>
+            </div>
+            <div>
+                <h3><span class="inline-code">reduce</span> &mdash; accumulate into one value</h3>
+                <pre><code><span class="kw">const</span> sum = nums.<span class="fn">reduce</span>((acc, n) <span class="op">=></span> acc + n, <span class="num">0</span>);
+<span class="cmt">// 10</span></code></pre>
+                <div class="info-box" style="margin-top:12px;">
+                    <strong>How <span class="inline-code">reduce</span> works:</strong>
+                    <pre style="border:none;margin:8px 0 0;padding:8px 12px;background:var(--code-nested-bg);"><code><span class="cmt">// Step by step:</span>
+<span class="cmt">// acc=0, n=1 → 0+1 = 1</span>
+<span class="cmt">// acc=1, n=2 → 1+2 = 3</span>
+<span class="cmt">// acc=3, n=3 → 3+3 = 6</span>
+<span class="cmt">// acc=6, n=4 → 6+4 = 10</span></code></pre>
+                </div>
+                <h3 style="margin-top:14px;">Chaining</h3>
+                <pre><code><span class="kw">const</span> result = nums
+    .<span class="fn">filter</span>(n <span class="op">=></span> n > <span class="num">2</span>)
+    .<span class="fn">map</span>(n <span class="op">=></span> n * <span class="num">10</span>);
+<span class="cmt">// [30, 40]</span></code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════ SLIDE 17: Objects ══════════ -->
+    <section class="slide" data-title="Objects">
+        <div class="slide-label">Block 3 &mdash; Objects</div>
+        <h2>Objects</h2>
+        <p>Objects are structured data + behavior &mdash; key-value pairs where values can be anything, including functions.</p>
+        <div class="cols" style="margin-top:10px;">
+            <div>
+                <h3>Object Literal</h3>
+                <pre><code><span class="kw">const</span> person = {
+    name: <span class="str">"John Doe"</span>,
+    age: <span class="num">30</span>,
+    city: <span class="str">"New York"</span>,
+    hobbies: [<span class="str">"reading"</span>, <span class="str">"gaming"</span>, <span class="str">"cooking"</span>],
+    greet: <span class="kw">function</span>() {
+        <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Hello, my name is "</span> + <span class="kw">this</span>.name);
+    }
+};
+
+person.<span class="fn">greet</span>();
+<span class="cmt">// "Hello, my name is John Doe"</span></code></pre>
+            </div>
+            <div>
+                <h3>Accessing properties</h3>
+                <pre><code><span class="fn">console</span>.<span class="fn">log</span>(person.name);       <span class="cmt">// dot notation</span>
+<span class="fn">console</span>.<span class="fn">log</span>(person[<span class="str">"age"</span>]);     <span class="cmt">// bracket notation</span>
+<span class="fn">console</span>.<span class="fn">log</span>(person.hobbies[<span class="num">0</span>]); <span class="cmt">// "reading"</span></code></pre>
+                <h3>Adding / modifying</h3>
+                <pre><code>person.email = <span class="str">"john@example.com"</span>;  <span class="cmt">// add</span>
+person.age = <span class="num">31</span>;                     <span class="cmt">// modify</span></code></pre>
+                <div class="info-box" style="margin-top:12px;">
+                    Objects are everywhere in JS. API responses, DOM elements, configuration &mdash; all objects. This is the pattern you'll see most in real codebases.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════ SLIDE 18: Hands-on 2 ══════════ -->
+    <section class="slide" data-title="Hands-on 2">
+        <div class="slide-label">Block 3 &mdash; Practice Time (~30 min)</div>
+        <h2>Hands-on 2 &mdash; Real JS: Work with Data</h2>
+        <p>Use this dataset for all tasks:</p>
+        <pre><code><span class="kw">const</span> employees = [
+    { name: <span class="str">"Alice"</span>,  age: <span class="num">28</span>, department: <span class="str">"Engineering"</span>, salary: <span class="num">75000</span> },
+    { name: <span class="str">"Bob"</span>,    age: <span class="num">35</span>, department: <span class="str">"Marketing"</span>,   salary: <span class="num">60000</span> },
+    { name: <span class="str">"Carol"</span>,  age: <span class="num">24</span>, department: <span class="str">"Engineering"</span>, salary: <span class="num">70000</span> },
+    { name: <span class="str">"Dave"</span>,   age: <span class="num">42</span>, department: <span class="str">"Marketing"</span>,   salary: <span class="num">80000</span> },
+    { name: <span class="str">"Eve"</span>,    age: <span class="num">30</span>, department: <span class="str">"Engineering"</span>, salary: <span class="num">90000</span> },
+    { name: <span class="str">"Frank"</span>,  age: <span class="num">26</span>, department: <span class="str">"Design"</span>,      salary: <span class="num">55000</span> },
+];</code></pre>
+
+        <div class="card-grid">
+            <div class="card" style="border-left:4px solid var(--green);">
+                <h3 style="color:var(--green);">Level 1 &mdash; <span class="inline-code">map</span></h3>
+                <p>Extract all names into a new array.</p>
+            </div>
+            <div class="card" style="border-left:4px solid var(--green);">
+                <h3 style="color:var(--green);">Level 2 &mdash; <span class="inline-code">filter</span></h3>
+                <p>Get only employees older than 27.</p>
+            </div>
+            <div class="card" style="border-left:4px solid var(--cyan);">
+                <h3 style="color:var(--cyan);">Level 3 &mdash; <span class="inline-code">filter</span> + <span class="inline-code">map</span></h3>
+                <p>Get names of Engineering employees only.</p>
+            </div>
+            <div class="card" style="border-left:4px solid var(--orange);">
+                <h3 style="color:var(--orange);">Level 4 &mdash; <span class="inline-code">reduce</span></h3>
+                <p>Calculate total &amp; average salary.</p>
+            </div>
+            <div class="card" style="border-left:4px solid var(--red);">
+                <h3 style="color:var(--red);">Level 5 (Bonus) &mdash; <span class="inline-code">reduce</span></h3>
+                <p>Group employees by department.</p>
+            </div>
+        </div>
+        <p class="dim" style="font-size:.82rem;margin-top:8px;">If most reach Level 3, that's a win. Fast finishers: attempt Level 5!</p>
+    </section>
+
+    <!-- ══════════ SLIDE 19: Hands-on 2 Solutions ══════════ -->
+    <section class="slide" data-title="Hands-on 2 — Solutions">
+        <div class="slide-label">Block 3 &mdash; Solutions</div>
+        <h2>Hands-on 2 &mdash; Solutions</h2>
+        <div class="assignment-card">
+            <h3>Levels 1&ndash;4</h3>
+            <button class="reveal-btn" onclick="toggleReveal('reveal-h2')">Reveal Solutions</button>
+            <div id="reveal-h2" class="hidden-code">
+                <pre><code><span class="cmt">// Level 1: Extract all names</span>
+<span class="kw">const</span> names = employees.<span class="fn">map</span>(e <span class="op">=></span> e.name);
+<span class="cmt">// ["Alice", "Bob", "Carol", "Dave", "Eve", "Frank"]</span>
+
+<span class="cmt">// Level 2: Filter above 27</span>
+<span class="kw">const</span> seniors = employees.<span class="fn">filter</span>(e <span class="op">=></span> e.age > <span class="num">27</span>);
+
+<span class="cmt">// Level 3: Names of Engineering employees</span>
+<span class="kw">const</span> engNames = employees
+    .<span class="fn">filter</span>(e <span class="op">=></span> e.department === <span class="str">"Engineering"</span>)
+    .<span class="fn">map</span>(e <span class="op">=></span> e.name);
+<span class="cmt">// ["Alice", "Carol", "Eve"]</span>
+
+<span class="cmt">// Level 4: Total &amp; average salary</span>
+<span class="kw">const</span> totalSalary = employees.<span class="fn">reduce</span>((sum, e) <span class="op">=></span> sum + e.salary, <span class="num">0</span>);
+<span class="kw">const</span> avgSalary = totalSalary / employees.length;</code></pre>
+            </div>
+        </div>
+        <div class="assignment-card">
+            <h3>Level 5 (Bonus) &mdash; Group by department</h3>
+            <button class="reveal-btn" onclick="toggleReveal('reveal-h2-5')">Reveal Solution</button>
+            <div id="reveal-h2-5" class="hidden-code">
+                <pre><code><span class="kw">const</span> grouped = employees.<span class="fn">reduce</span>((acc, e) <span class="op">=></span> {
+    <span class="kw">if</span> (!acc[e.department]) acc[e.department] = [];
+    acc[e.department].<span class="fn">push</span>(e);
+    <span class="kw">return</span> acc;
+}, {});
+<span class="cmt">// { Engineering: [...], Marketing: [...], Design: [...] }</span></code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════ SLIDE 20: Scopes ══════════ -->
+    <section class="slide" data-title="Scopes">
+        <div class="slide-label">Block 3 &mdash; Scope</div>
+        <h2>Scopes &mdash; Where Do Variables Live?</h2>
+        <p>You've been writing <span class="inline-code">let</span> and <span class="inline-code">const</span> all morning &mdash; now let's see <em>where</em> they're visible.</p>
+        <div class="card-grid" style="margin-top:14px;">
+            <div class="card">
+                <h3>Global Scope</h3>
+                <p>Declared outside any function or block &mdash; accessible <strong>everywhere</strong>.</p>
+                <pre><code><span class="kw">const</span> appName = <span class="str">"MyApp"</span>;
+<span class="cmt">// accessible anywhere in the file</span></code></pre>
+            </div>
+            <div class="card">
+                <h3>Function Scope</h3>
+                <p>Declared inside a function &mdash; accessible only <strong>within that function</strong>.</p>
+                <pre><code><span class="kw">function</span> <span class="fn">greet</span>() {
+    <span class="kw">var</span> msg = <span class="str">"Hi"</span>;
+    <span class="fn">console</span>.<span class="fn">log</span>(msg); <span class="cmt">// works</span>
+}
+<span class="fn">console</span>.<span class="fn">log</span>(msg); <span class="cmt">// ReferenceError!</span></code></pre>
+            </div>
+            <div class="card">
+                <h3>Block Scope</h3>
+                <p><span class="inline-code">let</span> and <span class="inline-code">const</span> are confined to the <span class="inline-code">{}</span> block. <span class="inline-code">var</span> <strong>leaks out</strong>.</p>
+                <pre><code>{
+    <span class="kw">let</span> x = <span class="num">10</span>;
+    <span class="kw">const</span> y = <span class="num">20</span>;
+    <span class="kw">var</span> z = <span class="num">30</span>;
+}
+<span class="cmt">// x, y → ReferenceError</span>
+<span class="cmt">// z → 30 (var leaks!)</span></code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════ SLIDE 21: var vs let/const + Shadowing ══════════ -->
+    <section class="slide" data-title="var vs let/const & Shadowing">
+        <div class="slide-label">Block 3 &mdash; Scope</div>
+        <h2><span class="inline-code">var</span> vs <span class="inline-code">let</span>/<span class="inline-code">const</span> in Blocks &amp; Shadowing</h2>
+        <div class="cols">
+            <div>
+                <h3>Predict the output</h3>
+                <pre><code>{
+    <span class="kw">var</span> a = <span class="num">10</span>;
+    <span class="kw">let</span> b = <span class="num">20</span>;
+    <span class="kw">const</span> c = <span class="num">30</span>;
+
+    <span class="fn">console</span>.<span class="fn">log</span>(a);  <span class="cmt">// ?</span>
+    <span class="fn">console</span>.<span class="fn">log</span>(b);  <span class="cmt">// ?</span>
+    <span class="fn">console</span>.<span class="fn">log</span>(c);  <span class="cmt">// ?</span>
+}
+
+<span class="fn">console</span>.<span class="fn">log</span>(a);  <span class="cmt">// ?</span>
+<span class="fn">console</span>.<span class="fn">log</span>(b);  <span class="cmt">// ?</span>
+<span class="fn">console</span>.<span class="fn">log</span>(c);  <span class="cmt">// ?</span></code></pre>
+                <button class="reveal-btn" onclick="toggleReveal('reveal-scope')">Reveal Answer</button>
+                <div id="reveal-scope" class="hidden-code">
+                    <div class="output-box">Inside block: 10, 20, 30<br>Outside: a → 10 (var leaks out)<br>b → ReferenceError (let is block-scoped)<br>c → ReferenceError (const is block-scoped)</div>
+                </div>
+            </div>
+            <div>
+                <h3>Shadowing</h3>
+                <pre><code><span class="kw">let</span> x = <span class="str">"outer"</span>;
+
+{
+    <span class="kw">let</span> x = <span class="str">"inner"</span>;  <span class="cmt">// shadows the outer x</span>
+    <span class="fn">console</span>.<span class="fn">log</span>(x);   <span class="cmt">// "inner"</span>
+}
+
+<span class="fn">console</span>.<span class="fn">log</span>(x);       <span class="cmt">// "outer" (unchanged)</span></code></pre>
+                <div class="info-box" style="margin-top:14px;">
+                    <strong>Shadowing</strong> means a variable with the same name in an inner scope "hides" the outer one. The outer variable is <em>not</em> modified &mdash; it resumes after the block ends.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════ SLIDE 22: How JS Works — Execution Context ══════════ -->
+    <section class="slide" data-title="Execution Context">
+        <div class="slide-label">Block 4 &mdash; Under the Hood</div>
+        <h2>How Does JavaScript Actually Run?</h2>
+        <div class="cols">
+            <div>
+                <ul>
+                    <li>Everything runs inside an <span class="highlight">Execution Context</span></li>
+                    <li>JS is <span class="highlight">synchronous</span> and <span class="highlight">single-threaded</span></li>
+                    <li>One command at a time, in order</li>
+                </ul>
+                <h3 style="margin-top:18px;">Two phases</h3>
+                <div class="card" style="margin-top:8px;">
+                    <h3 style="color:var(--accent-light);">1. Memory Creation Phase</h3>
+                    <p>JS scans the code and allocates memory:<br>
+                    &bull; Variables (<span class="inline-code">var</span>) &rarr; set to <span class="inline-code">undefined</span><br>
+                    &bull; Functions &rarr; stored entirely in memory</p>
+                </div>
+                <div class="card" style="margin-top:10px;">
+                    <h3 style="color:var(--cyan);">2. Code Execution Phase</h3>
+                    <p>JS runs code line by line. Variables get their actual values. Function calls create <em>new</em> execution contexts.</p>
+                </div>
+            </div>
+            <div>
+                <h3>Trace this example</h3>
+                <pre><code><span class="kw">var</span> x = <span class="num">10</span>;
+
+<span class="kw">function</span> <span class="fn">double</span>(n) {
+    <span class="kw">var</span> result = n * <span class="num">2</span>;
+    <span class="kw">return</span> result;
+}
+
+<span class="kw">var</span> output = <span class="fn">double</span>(x);</code></pre>
+                <div class="ref-diagram">
+                    <strong>Memory Phase (Global EC):</strong><br>
+                    <span style="color:var(--cyan)">x</span> → <span style="color:var(--text-dim)">undefined</span><br>
+                    <span style="color:var(--cyan)">double</span> → <span style="color:var(--green)">&#x0192;(n) { ... }</span><br>
+                    <span style="color:var(--cyan)">output</span> → <span style="color:var(--text-dim)">undefined</span><br><br>
+                    <strong>Execution Phase:</strong><br>
+                    <span style="color:var(--cyan)">x</span> → <span style="color:var(--orange)">10</span><br>
+                    <span style="color:var(--cyan)">double(10)</span> → creates new EC<br>
+                    <span style="color:var(--cyan)">output</span> → <span style="color:var(--orange)">20</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════ SLIDE 23: Call Stack ══════════ -->
+    <section class="slide" data-title="Call Stack">
+        <div class="slide-label">Block 4 &mdash; Under the Hood</div>
+        <h2>Call Stack</h2>
+        <p>Also called Runtime Stack / Machine Stack. It tracks <em>which function is currently executing</em>.</p>
+        <div class="cols" style="margin-top:14px;">
+            <div>
+                <pre><code><span class="kw">function</span> <span class="fn">first</span>() {
+    <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"first"</span>);
+    <span class="fn">second</span>();
+    <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"first done"</span>);
+}
+
+<span class="kw">function</span> <span class="fn">second</span>() {
+    <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"second"</span>);
+    <span class="fn">third</span>();
+}
+
+<span class="kw">function</span> <span class="fn">third</span>() {
+    <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"third"</span>);
+}
+
+<span class="fn">first</span>();</code></pre>
+            </div>
+            <div>
+                <div class="ref-diagram" style="text-align:left;padding:16px 22px;">
+                    <strong style="color:var(--accent-light);">Call Stack (LIFO):</strong><br><br>
+                    <span class="dim">Step 1:</span> <span style="color:var(--cyan)">[Global]</span><br>
+                    <span class="dim">Step 2:</span> <span style="color:var(--cyan)">[Global] → [first]</span><br>
+                    <span class="dim">Step 3:</span> <span style="color:var(--cyan)">[Global] → [first] → [second]</span><br>
+                    <span class="dim">Step 4:</span> <span style="color:var(--cyan)">[Global] → [first] → [second] → [third]</span><br>
+                    <span class="dim">Step 5:</span> <span style="color:var(--green)">third returns</span> → popped<br>
+                    <span class="dim">Step 6:</span> <span style="color:var(--green)">second returns</span> → popped<br>
+                    <span class="dim">Step 7:</span> <span style="color:var(--green)">first returns</span> → popped<br>
+                    <span class="dim">Step 8:</span> <span style="color:var(--green)">Global EC</span> → done
+                </div>
+                <div class="info-box" style="margin-top:14px;">
+                    <strong>LIFO</strong> = Last In, First Out. Each function call <em>pushes</em> a new context onto the stack. When a function returns, its context is <em>popped</em> off.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════ SLIDE 24: Hoisting ══════════ -->
+    <section class="slide" data-title="Hoisting">
+        <div class="slide-label">Block 4 &mdash; Under the Hood</div>
+        <h2>Hoisting &mdash; Predict the Output!</h2>
+        <p>Now that you know about the memory creation phase &mdash; predict what happens here:</p>
+        <div class="cols" style="margin-top:12px;">
+            <div>
+                <h3>Functions are fully hoisted</h3>
+                <pre><code><span class="fn">getName</span>();
+<span class="fn">console</span>.<span class="fn">log</span>(x);
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="fn">getName</span>);
+
+<span class="kw">function</span> <span class="fn">getName</span>() {
+    <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"KeyValue Software Systems"</span>);
+}
+
+<span class="kw">var</span> x = <span class="num">10</span>;</code></pre>
+                <button class="reveal-btn" onclick="toggleReveal('reveal-hoist1')">Reveal Answer</button>
+                <div id="reveal-hoist1" class="hidden-code">
+                    <div class="output-box">"KeyValue Software Systems"<br>undefined<br>f getName() { ... }</div>
+                    <p class="dim" style="font-size:.82rem;margin-top:8px;"><span class="inline-code">getName</span> works because function declarations are fully hoisted. <span class="inline-code">x</span> is <span class="inline-code">undefined</span> because <span class="inline-code">var</span> is hoisted but the value <span class="inline-code">10</span> isn't assigned yet.</p>
+                </div>
+            </div>
+            <div>
+                <h3>Arrow function = NOT hoisted like functions</h3>
+                <pre><code><span class="fn">getName</span>(); <span class="cmt">// What happens?</span>
+
+<span class="kw">var</span> getName = () <span class="op">=></span> {
+    <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"KeyValue Software Systems"</span>);
+};</code></pre>
+                <button class="reveal-btn" onclick="toggleReveal('reveal-hoist2')">Reveal Answer</button>
+                <div id="reveal-hoist2" class="hidden-code">
+                    <div class="output-box" style="color:var(--red);">TypeError: getName is not a function</div>
+                    <p class="dim" style="font-size:.82rem;margin-top:8px;">Arrow functions (and function expressions) assigned to <span class="inline-code">var</span> are hoisted as <span class="inline-code">undefined</span> &mdash; calling <span class="inline-code">undefined()</span> throws a TypeError.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════ SLIDE 25: let/const Hoisting + TDZ ══════════ -->
+    <section class="slide" data-title="let/const, TDZ & Loose Typing">
+        <div class="slide-label">Block 4 &mdash; Under the Hood</div>
+        <h2><span class="inline-code">let</span> / <span class="inline-code">const</span> with Hoisting &amp; TDZ</h2>
+        <div class="cols">
+            <div>
+                <h3>Predict this</h3>
+                <pre><code><span class="fn">console</span>.<span class="fn">log</span>(a);
+<span class="fn">console</span>.<span class="fn">log</span>(b);
+
+<span class="kw">let</span> a = <span class="num">10</span>;
+<span class="kw">var</span> b = <span class="num">20</span>;</code></pre>
+                <button class="reveal-btn" onclick="toggleReveal('reveal-tdz')">Reveal Answer</button>
+                <div id="reveal-tdz" class="hidden-code">
+                    <div class="output-box" style="color:var(--red);">ReferenceError: Cannot access 'a' before initialization</div>
+                    <p class="dim" style="font-size:.82rem;margin-top:8px;"><span class="inline-code">let</span> and <span class="inline-code">const</span> <em>are</em> hoisted, but they sit in the <span class="danger">Temporal Dead Zone (TDZ)</span> until their declaration is reached. Accessing them before that throws a ReferenceError.</p>
+                </div>
+                <div class="info-box" style="margin-top:14px;">
+                    <strong>TDZ</strong> = The zone between the start of the scope and the actual <span class="inline-code">let</span>/<span class="inline-code">const</span> declaration. Accessing the variable here is an error.
+                </div>
+            </div>
+            <div>
+                <h3><span class="inline-code">undefined</span> vs "not defined"</h3>
+                <pre><code><span class="kw">var</span> x;
+<span class="fn">console</span>.<span class="fn">log</span>(x);  <span class="cmt">// undefined (declared, no value)</span>
+<span class="fn">console</span>.<span class="fn">log</span>(y);  <span class="cmt">// ReferenceError: y is not defined</span></code></pre>
+                <h3 style="margin-top:18px;">JS is loosely typed</h3>
+                <pre><code><span class="kw">let</span> a = <span class="num">10</span>;
+a = <span class="str">"hello"</span>;  <span class="cmt">// no error — type changed!</span>
+a = <span class="kw">true</span>;     <span class="cmt">// still no error</span></code></pre>
+                <div class="info-box" style="margin-top:12px;">
+                    Variables in JS don't have fixed types. A variable can hold a number, then a string, then a boolean. This is <span class="highlight">dynamic/loose typing</span>.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════ SLIDE 26: Summary ══════════ -->
+    <section class="slide" data-title="Summary & Handover">
+        <div class="slide-label">Wrap Up</div>
+        <h2>What We Covered Today</h2>
+        <div class="card-grid">
+            <div class="card">
+                <h3 style="color:var(--accent-light);">Syntax &amp; Basics</h3>
+                <ul>
+                    <li>Data types (primitive vs non-primitive)</li>
+                    <li><span class="inline-code">var</span> / <span class="inline-code">let</span> / <span class="inline-code">const</span></li>
+                    <li>Operators (<span class="inline-code">===</span> always!)</li>
+                    <li>Control flow &amp; loops</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3 style="color:var(--cyan);">Functions &amp; Data</h3>
+                <ul>
+                    <li>Declaration vs expression vs arrow</li>
+                    <li>First-class functions</li>
+                    <li>Arrays: <span class="inline-code">map</span>, <span class="inline-code">filter</span>, <span class="inline-code">reduce</span></li>
+                    <li>Object literals &amp; methods</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3 style="color:var(--green);">Scope &amp; Engine</h3>
+                <ul>
+                    <li>Global / function / block scope</li>
+                    <li>Execution context &amp; two phases</li>
+                    <li>Call stack (LIFO)</li>
+                    <li>Hoisting, TDZ, loose typing</li>
+                </ul>
+            </div>
+        </div>
+        <div class="info-box" style="margin-top:20px;border-left-color:var(--orange);">
+            <strong>Next up (from 02:00):</strong> Closures depend on functions, scope, and how JS stores variables &mdash; <em>everything we covered today</em>. The next trainer will take you through <strong>Object Immutability</strong>, <strong>Closures</strong>, and <strong>Callbacks</strong> with hands-on practice.
+        </div>
+        <div style="text-align:center;margin-top:30px;">
+            <p style="font-size:1.1rem;color:var(--accent-light);font-weight:600;">Thank you! Happy coding!</p>
+            <p class="dim" style="margin-top:6px;font-size:.82rem;">Questions? Let&rsquo;s discuss!</p>
+        </div>
+    </section>
+
+</div>
+
+<div id="nav-bar">
+    <button id="btn-prev" onclick="navigate(-1)">&#8592; Previous</button>
+    <span id="slide-counter">1 / 27</span>
+    <button id="btn-next" onclick="navigate(1)">Next &#8594;</button>
+</div>
+
+<script>
+    const slides = document.querySelectorAll('.slide');
+    const total = slides.length;
+    let current = 0;
+
+    function showSlide(index) {
+        slides.forEach((s, i) => {
+            s.classList.remove('active', 'exit-left');
+            if (i < index) s.classList.add('exit-left');
+        });
+        slides[index].classList.add('active');
+        document.getElementById('slide-counter').textContent = `${index + 1} / ${total}`;
+        document.getElementById('progress').style.width = `${((index + 1) / total) * 100}%`;
+        document.getElementById('btn-prev').disabled = index === 0;
+        document.getElementById('btn-next').disabled = index === total - 1;
+        updateToc();
+    }
+
+    function navigate(dir) {
+        const next = current + dir;
+        if (next < 0 || next >= total) return;
+        current = next;
+        showSlide(current);
+    }
+
+    function goToSlide(index) {
+        current = index;
+        showSlide(current);
+        closeToc();
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); navigate(1); }
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); navigate(-1); }
+        if (e.key === 'm' || e.key === 'M') toggleToc();
+        if (e.key === 'Escape') closeToc();
+    });
+
+    function buildToc() {
+        const list = document.getElementById('toc-list');
+        slides.forEach((s, i) => {
+            const li = document.createElement('li');
+            li.textContent = `${i + 1}. ${s.dataset.title}`;
+            li.onclick = () => goToSlide(i);
+            list.appendChild(li);
+        });
+    }
+
+    function updateToc() {
+        const items = document.querySelectorAll('#toc li');
+        items.forEach((li, i) => li.classList.toggle('active', i === current));
+    }
+
+    function toggleToc() { document.getElementById('toc').classList.toggle('open'); }
+    function closeToc() { document.getElementById('toc').classList.remove('open'); }
+
+    function toggleReveal(id) {
+        const block = document.getElementById(id);
+        const btn = block.previousElementSibling;
+        const showing = block.classList.toggle('visible');
+        btn.textContent = showing ? 'Hide' : (btn.textContent.includes('Hint') ? 'Reveal Hint' : btn.textContent.includes('Solution') ? 'Reveal Solutions' : 'Reveal Answer');
+    }
+
+    let darkLogoSrc = null;
+    function getTheme() { return document.documentElement.getAttribute('data-theme'); }
+
+    function toggleTheme() {
+        const next = getTheme() === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        document.getElementById('theme-toggle').innerHTML = next === 'dark' ? '&#9790;' : '&#9728;';
+        updateWatermark();
+    }
+
+    function buildDarkLogo(callback) {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = function () {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width; canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const d = imageData.data;
+            for (let i = 0; i < d.length; i += 4) {
+                const r = d[i], g = d[i+1], b = d[i+2];
+                const sat = Math.max(r,g,b) === 0 ? 0 : (Math.max(r,g,b) - Math.min(r,g,b)) / Math.max(r,g,b);
+                if (r > 248 && g > 248 && b > 248) { d[i+3] = 0; }
+                else if (r > 220 && g > 220 && b > 220 && sat < 0.06) {
+                    d[i+3] = Math.round(255 * (1 - (r+g+b) / (3*255)));
+                }
+            }
+            ctx.putImageData(imageData, 0, 0);
+            darkLogoSrc = canvas.toDataURL('image/png');
+            callback();
+        };
+        img.onerror = function() { callback(); };
+        img.src = 'assets/logo.png';
+    }
+
+    function updateWatermark() {
+        const wm = document.getElementById('watermark');
+        if (!wm) return;
+        if (getTheme() === 'dark' && darkLogoSrc) wm.src = darkLogoSrc;
+        else wm.src = 'assets/logo.png';
+    }
+
+    function injectWatermark() {
+        const wm = document.createElement('img');
+        wm.id = 'watermark'; wm.className = 'watermark'; wm.alt = ''; wm.draggable = false;
+        document.body.appendChild(wm);
+        buildDarkLogo(() => { updateWatermark(); });
+    }
+
+    document.getElementById('theme-toggle').innerHTML = getTheme() === 'dark' ? '&#9790;' : '&#9728;';
+    buildToc();
+    showSlide(0);
+    injectWatermark();
+</script>
+
+</body>
+</html>
