@@ -84,7 +84,7 @@
             inset: 0;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: safe center;
             padding: 80px 80px 60px;
             opacity: 0;
             pointer-events: none;
@@ -241,7 +241,7 @@
             border: 1px solid var(--border); transition: background .35s, border-color .35s;
         }
         .top-bar-backdrop {
-            position: fixed; top: 0; left: 0; right: 0; height: 62px;
+            position: fixed; top: 0; left: 0; right: 0; height: 80px;
             background: var(--bg); z-index: 99; pointer-events: none; transition: background .35s;
         }
         .watermark {
@@ -726,11 +726,25 @@ a++;      <span class="cmt">// a is now 9</span></code></pre>
 
         <div class="assignment-card">
             <h3>Exercise 2 &mdash; Extract a function</h3>
-            <p>Calculate the total for several price arrays. Stop copy-pasting &mdash; <strong>make it a function</strong>.</p>
+            <p>Calculate the total for several price arrays. Instead of repeating the same loop, <strong>make it a function</strong>.</p>
             <pre><code><span class="kw">const</span> prices1 = [<span class="num">250</span>, <span class="num">120</span>, <span class="num">80</span>];
 <span class="kw">const</span> prices2 = [<span class="num">500</span>, <span class="num">60</span>, <span class="num">340</span>];
 <span class="kw">const</span> prices3 = [<span class="num">90</span>, <span class="num">45</span>, <span class="num">200</span>, <span class="num">150</span>];
 <span class="cmt">// Write a function getTotal(prices) and call it for each</span></code></pre>
+            <button class="reveal-btn" onclick="toggleReveal('reveal-h1-2')">Reveal Hint</button>
+            <div id="reveal-h1-2" class="hidden-code">
+                <pre><code><span class="kw">function</span> <span class="fn">getTotal</span>(prices) {
+    <span class="kw">let</span> total = <span class="num">0</span>;
+    <span class="kw">for</span> (<span class="kw">const</span> price <span class="kw">of</span> prices) {
+        total += price;
+    }
+    <span class="kw">return</span> total;
+}
+
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="fn">getTotal</span>(prices1)); <span class="cmt">// 450</span>
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="fn">getTotal</span>(prices2)); <span class="cmt">// 900</span>
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="fn">getTotal</span>(prices3)); <span class="cmt">// 485</span></code></pre>
+            </div>
         </div>
 
         <div class="assignment-card">
@@ -1274,8 +1288,9 @@ a = <span class="kw">true</span>;     <span class="cmt">// still no error</span>
     function toggleReveal(id) {
         const block = document.getElementById(id);
         const btn = block.previousElementSibling;
+        if (!btn.dataset.originalText) btn.dataset.originalText = btn.textContent;
         const showing = block.classList.toggle('visible');
-        btn.textContent = showing ? 'Hide' : (btn.textContent.includes('Hint') ? 'Reveal Hint' : btn.textContent.includes('Solution') ? 'Reveal Solutions' : 'Reveal Answer');
+        btn.textContent = showing ? 'Hide' : btn.dataset.originalText;
     }
 
     let darkLogoSrc = null;
