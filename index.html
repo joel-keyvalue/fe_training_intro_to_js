@@ -761,6 +761,28 @@ a++;      <span class="cmt">// a is now 9</span></code></pre>
 <span class="fn">processArray</span>(prices1, (count, p) <span class="op">=></span> p > <span class="num">100</span> ? count + <span class="num">1</span> : count); <span class="cmt">// count above 100</span></code></pre>
             </div>
         </div>
+
+        <div class="assignment-card">
+            <h3>Exercise 4 &mdash; Custom action on each item</h3>
+            <p>Write a function <span class="inline-code">forEachItem(arr, action)</span> that loops through the array and calls <span class="inline-code">action</span> on each item. Then use it to:</p>
+            <ol style="margin:8px 0 0 1.4em;font-size:.9rem;">
+                <li>Print the <strong>double</strong> of each price</li>
+                <li>Print the <strong>square</strong> of each price</li>
+                <li>Print each price with a <strong>10% discount</strong> applied</li>
+            </ol>
+            <button class="reveal-btn" onclick="toggleReveal('reveal-h1-4')">Reveal Hint</button>
+            <div id="reveal-h1-4" class="hidden-code">
+                <pre><code><span class="kw">function</span> <span class="fn">forEachItem</span>(arr, action) {
+    <span class="kw">for</span> (<span class="kw">const</span> item <span class="kw">of</span> arr) {
+        <span class="fn">action</span>(item);
+    }
+}
+
+<span class="fn">forEachItem</span>(prices1, (p) <span class="op">=></span> <span class="fn">console</span>.<span class="fn">log</span>(p * <span class="num">2</span>));
+<span class="fn">forEachItem</span>(prices1, (p) <span class="op">=></span> <span class="fn">console</span>.<span class="fn">log</span>(p * p));
+<span class="fn">forEachItem</span>(prices1, (p) <span class="op">=></span> <span class="fn">console</span>.<span class="fn">log</span>(p * <span class="num">0.9</span>));</code></pre>
+            </div>
+        </div>
     </section>
 
     <!-- ══════════ SLIDE 15: Arrays Basics ══════════ -->
